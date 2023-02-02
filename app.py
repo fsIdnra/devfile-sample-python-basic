@@ -1,11 +1,15 @@
 from flask import Flask
+import redis
 import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return "Hello World!"
+    r = redis.Redis(host='redis', port=6379, db=0)
+    count = r.get('count')
+    r.set('count', count+1)
+    return f"Hello World! Count: ${count}"
 
 if __name__ == '__main__':
     port = os.environ.get('FLASK_PORT') or 8080
