@@ -7,7 +7,7 @@ app = Flask(__name__)
 def index():
     try:
         import redis
-        r = redis.Redis(host=os.environ.get('REDIS_HOST'), port=os.environ.get('REDIS_PORT'), db=0)
+        r = redis.Redis(host=os.environ.get('REDIS_HOST'), port=os.environ.get('REDIS_PORT'), password=os.environ.get('REDIS_PW') db=0)
         count = r.get('count')
         r.set('count', count+1)
         return f"Count: {count}"
