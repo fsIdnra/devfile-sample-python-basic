@@ -1,16 +1,12 @@
 from flask import Flask
-import redis
 import os
 
 app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    return "Hello World!"
-
-@app.route('/count')
-def count():
+def index():
     try:
+        import redis
         r = redis.Redis(host=os.environ.get('REDIS_HOST'), port=os.environ.get('REDIS_PORT'), db=0)
         count = r.get('count')
         r.set('count', count+1)
