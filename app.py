@@ -1,4 +1,5 @@
 from flask import Flask
+import redis
 import os
 
 app = Flask(__name__)
@@ -6,10 +7,11 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     try:
-        import redis
-        r = redis.Redis(host=os.environ.get('REDIS_HOST'), port=os.environ.get('REDIS_PORT'), username=os.environ.get('REDIS_USER'), password=os.environ.get('REDIS_PW'), db=0)
+        print(f"host: {os.environ.get('REDIS_HOST')}, port: {os.environ.get('REDIS_PORT')}, pw: {os.environ.get('REDIS_PW')}", flush=True)
+        r = redis.Redis(host=os.environ.get('REDIS_HOST'), port=os.environ.get('REDIS_PORT'), password=os.environ.get('REDIS_PW'), db=0)
         count = r.get('count')
         r.set('count', count+1)
+        count = r.get('count')
         return f"Count: {count}"
     except Exception as e:
         return str(e)
